@@ -9,7 +9,7 @@ class VoiceChannel extends Model
     use HasFactory;
 
     public $table = "tabel_channel_voice";
-    public $timestamps = false;
+    // public $timestamps = false;
 
     protected $fillable = [
         'kode_channel', 'id_travel', 'id_paket', 'nama_channel', 'nama_channel_opsi', 'kepala_group', 'id_users', 'mulai_channel', 'selesai_channel', 'status'

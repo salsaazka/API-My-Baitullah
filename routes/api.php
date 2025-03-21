@@ -6,6 +6,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\OtpController;
 use App\Http\Controllers\API\VoiceController;
+use App\Http\Controllers\API\VoiceChannelController;
 use App\Http\Controllers\API\LogoutController;
 use App\Http\Controllers\API\AuthController;
 
@@ -33,10 +34,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('user/update_status_login', [UserController::class, 'updateStatusLogin']);
     Route::post('user/update_device_id', [UserController::class, 'updateDeviceId']);
     
+    // DELETE ACCOUNT
+    Route::delete('/delete-account', [UserController::class, 'deleteAccount']);
 });
-
-// DELETE ACCOUNT
-Route::delete('/delete-account', [UserController::class, 'deleteAccount']);
 
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 Route::middleware('auth:api')->post('/refresh', [AuthController::class, 'refreshToken']);
@@ -54,4 +54,18 @@ Route::group(['prefix' => 'voice_channel', 'middleware' => ['auth:api']], functi
     Route::post('/insert_voice_online', [VoiceController::class, 'insertLogVoiceOnline']);
     Route::post('/update_voice_online', [VoiceController::class, 'updateLogVoiceOnline']);
     Route::get('/realtime_user_online/{id}', [VoiceController::class, 'getRealtimeUserOnline']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/voice-channels', [VoiceChannelController::class, 'index']);
+    Route::post('/voice-channels', [VoiceChannelController::class, 'store']);
+    Route::get('/voice-channels/{voiceChannel}', [VoiceChannelController::class, 'show']);
+    Route::put('/voice-channels/{voiceChannel}', [VoiceChannelController::class, 'update']);
+    Route::delete('/voice-channels/{voiceChannel}', [VoiceChannelController::class, 'destroy']);
+
+    // Route untuk join channel
+    Route::post('/voice-channels/{channelId}/join', [VoiceChannelController::class, 'joinChannel']);
+
+    // Route untuk leave channel
+    Route::post('/voice-channels/{channelId}/leave', [VoiceChannelController::class, 'leaveChannel']);
 });

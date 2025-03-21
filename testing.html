@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laravel Reverb Debug</title>
+</head>
+<body>
+    <h1>Listening for Debug Events...</h1>
+    <div id="messages"></div>
+
+    <script>
+        const ws = new WebSocket("ws://0.0.0.0:8080/reverb");
+
+        ws.onopen = function () {
+            console.log("Connected to Laravel Reverb WebSocket");
+        };
+
+        ws.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            if (data.event === "debug-event") {
+                const messagesDiv = document.getElementById("messages");
+                const messageElement = document.createElement("p");
+                messageElement.textContent = `Received: ${data.data.message}`;
+                messagesDiv.appendChild(messageElement);
+            }
+        };
+
+        ws.onerror = function (error) {
+            console.error("WebSocket Error:", error);
+        };
+
+        ws.onclose = function () {
+            console.log("WebSocket Connection Closed");
+        };
+    </script>ffffffffffffffffff;;
+</body>
+</html>

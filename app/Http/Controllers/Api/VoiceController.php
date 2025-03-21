@@ -21,11 +21,10 @@ class VoiceController extends Controller
 {
     public function create(Request $request)
     {
-        try { 
-            // Ambil user yang sedang login
+        try {
+            
             $user = JWTAuth::parseToken()->authenticate();
 
-            // Validasi input
             $validator = Validator::make($request->all(), [
                 'id_travel' => 'required|integer',
                 'nama_channel' => 'required|string',
@@ -56,8 +55,6 @@ class VoiceController extends Controller
             $voice->status = "tidak_aktif";
             $voice->author = strtolower($user->email);
             $voice->updater = strtolower($user->email);
-            $voice->created = Carbon::now();
-            $voice->updated = Carbon::now();
             $voice->save();
 
             return ResponseFormatter::success($voice, 'Berhasil di Input');
